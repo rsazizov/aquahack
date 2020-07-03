@@ -1,0 +1,12 @@
+node_modules/**/*
+.expo/*
+npm-debug.*
+package-lock.json
+yarn.lock
+*.jks
+*.p12
+*.key
+*.mobileprovision
+venv
+__pycache__
+*.pyc
