@@ -10,6 +10,7 @@ import { Block } from "galio-framework";
 // screens
 import Home from "../screens/Home";
 import Login from "../screens/Login";
+import Field from "../screens/Field";
 import Profile from "../screens/Profile";
 import Elements from "../screens/Elements";
 
@@ -86,6 +87,8 @@ function HomeStack(props) {
           cardStyle: { backgroundColor: "#F8F9FE" }
         }}
       />
+
+      <Stack.Screen name="Field" component={Field} />
     </Stack.Navigator>
   );
 }

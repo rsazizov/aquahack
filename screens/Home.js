@@ -10,6 +10,7 @@ const { width } = Dimensions.get('screen');
 import {
   LineChart
 } from 'react-native-chart-kit';
+
 import { argonTheme } from '../constants';
 import FieldCard from '../components/FieldCard';
 
@@ -86,12 +87,22 @@ class Home extends React.Component {
     );
   }
 
+  constructor(props) {
+    super(props);
+    this.renderFieldCard = this.renderFieldCard.bind(this);
+  }
+
+  viewField(name) {
+    this.props.navigation.navigate("Field", {field: name});
+  }
+
   renderFieldCard(field) {
     return (
       <FieldCard 
         title={field.name}
         ndvi={field.ndvi}
         water={field.water}
+        onPress={this.viewField.bind(this, field.name)}
         />
     );
   }

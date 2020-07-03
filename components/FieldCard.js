@@ -7,7 +7,8 @@ const { width } = Dimensions.get('screen');
 
 export default (props) => {
   return (
-    <TouchableNativeFeedback>
+    <TouchableNativeFeedback
+      onPress={props.onPress}>
       <Block
         card={true}
         shadow={true}
