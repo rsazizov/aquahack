@@ -8,6 +8,7 @@ from itsdangerous import (TimedJSONWebSignatureSerializer
 
 class User(db.Model):
   __tablename__ = 'user'
+
   id = db.Column(db.Integer, primary_key=True)
   username = db.Column(db.String(32), index = True)
   password_hash = db.Column(db.String(128))
@@ -34,3 +35,16 @@ class User(db.Model):
 
       user = User.query.get(data['id'])
       return user
+  
+  def __repr__():
+    return f'<User name={self.name}>'
+
+class Field(db.Model):
+  __tablename__ = 'field'
+
+  id = db.Column(db.Integer, primary_key=True)
+  user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+  geo = db.Column(db.JSON)
+
+  def __repr__():
+    return f'<Field id={self.id}'

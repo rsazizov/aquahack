@@ -50,7 +50,6 @@ function CustomDrawerContent({ drawerPosition, navigation, profile, focused, sta
   );
 }
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

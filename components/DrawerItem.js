@@ -13,7 +13,7 @@ class DrawerItem extends React.Component {
       case "Home":
         return (
           <Icon
-            name="shop"
+            name="chart-pie-35"
             family="ArgonExtra"
             size={14}
             color={focused ? "white" : argonTheme.COLORS.PRIMARY}

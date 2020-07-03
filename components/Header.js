@@ -50,6 +50,7 @@ class Header extends React.Component {
     const { back, navigation } = this.props;
     return (back ? navigation.goBack() : navigation.openDrawer());
   }
+
   renderRight = () => {
     const { white, title, navigation } = this.props;
 
@@ -61,109 +62,53 @@ class Header extends React.Component {
     }
 
     switch (title) {
-      case 'Home':
-        return ([
-          <BellButton key='chat-home' navigation={navigation} isWhite={white} />,
-          <BasketButton key='basket-home' navigation={navigation} isWhite={white} />
-        ]);
-      case 'Deals':
-        return ([
-          <BellButton key='chat-categories' navigation={navigation} />,
-          <BasketButton key='basket-categories' navigation={navigation} />
-        ]);
-      case 'Categories':
-        return ([
-          <BellButton key='chat-categories' navigation={navigation} isWhite={white} />,
-          <BasketButton key='basket-categories' navigation={navigation} isWhite={white} />
-        ]);
-      case 'Category':
-        return ([
-          <BellButton key='chat-deals' navigation={navigation} isWhite={white} />,
-          <BasketButton key='basket-deals' navigation={navigation} isWhite={white} />
-        ]);
-      case 'Profile':
-        return ([
-          <BellButton key='chat-profile' navigation={navigation} isWhite={white} />,
-          <BasketButton key='basket-deals' navigation={navigation} isWhite={white} />
-        ]);
-      case 'Product':
-        return ([
-          <SearchButton key='search-product' navigation={navigation} isWhite={white} />,
-          <BasketButton key='basket-product' navigation={navigation} isWhite={white} />
-        ]);
-      case 'Search':
-        return ([
-          <BellButton key='chat-search' navigation={navigation} isWhite={white} />,
-          <BasketButton key='basket-search' navigation={navigation} isWhite={white} />
-        ]);
-      case 'Settings':
-        return ([
-          <BellButton key='chat-search' navigation={navigation} isWhite={white} />,
-          <BasketButton key='basket-search' navigation={navigation} isWhite={white} />
-        ]);
+      // case 'Home':
+      //   return ([
+      //     <BellButton key='chat-home' navigation={navigation} isWhite={white} />,
+      //     <BasketButton key='basket-home' navigation={navigation} isWhite={white} />
+      //   ]);
+    //   case 'Deals':
+    //     return ([
+    //       <BellButton key='chat-categories' navigation={navigation} />,
+    //       <BasketButton key='basket-categories' navigation={navigation} />
+    //     ]);
+    //   case 'Categories':
+    //     return ([
+    //       <BellButton key='chat-categories' navigation={navigation} isWhite={white} />,
+    //       <BasketButton key='basket-categories' navigation={navigation} isWhite={white} />
+    //     ]);
+    //   case 'Category':
+    //     return ([
+    //       <BellButton key='chat-deals' navigation={navigation} isWhite={white} />,
+    //       <BasketButton key='basket-deals' navigation={navigation} isWhite={white} />
+    //     ]);
+    //   case 'Profile':
+    //     return ([
+    //       <BellButton key='chat-profile' navigation={navigation} isWhite={white} />,
+    //       <BasketButton key='basket-deals' navigation={navigation} isWhite={white} />
+    //     ]);
+    //   case 'Product':
+    //     return ([
+    //       <SearchButton key='search-product' navigation={navigation} isWhite={white} />,
+    //       <BasketButton key='basket-product' navigation={navigation} isWhite={white} />
+    //     ]);
+    //   case 'Settings':
+    //     return ([
+    //       <BellButton key='chat-search' navigation={navigation} isWhite={white} />,
+    //       <BasketButton key='basket-search' navigation={navigation} isWhite={white} />
+    //     ]);
       default:
         break;
     }
   }
-  renderSearch = () => {
-    const { navigation } = this.props;
-    return (
-      <Input
-        right
-        color="black"
-        style={styles.search}
-        placeholder="What are you looking for?"
-        placeholderTextColor={'#8898AA'}
-        onFocus={() => navigation.navigate('Pro')}
-        iconContent={<Icon size={16} color={theme.COLORS.MUTED} name="search-zoom-in" family="ArgonExtra" />}
-      />
-    );
-  }
-  renderOptions = () => {
-    const { navigation, optionLeft, optionRight } = this.props;
 
+  renderHeader = () => {
     return (
-      <Block row style={styles.options}>
-        <Button shadowless style={[styles.tab, styles.divider]} onPress={() => navigation.navigate('Pro')}>
-          <Block row middle>
-            <Icon name="diamond" family="ArgonExtra" style={{ paddingRight: 8 }} color={argonTheme.COLORS.ICON} />
-            <Text size={16} style={styles.tabTitle}>{optionLeft || 'Beauty'}</Text>
-          </Block>
-        </Button>
-        <Button shadowless style={styles.tab} onPress={() => navigation.navigate('Pro')}>
-          <Block row middle>
-            <Icon size={16} name="bag-17" family="ArgonExtra" style={{ paddingRight: 8 }} color={argonTheme.COLORS.ICON}/>
-            <Text size={16} style={styles.tabTitle}>{optionRight || 'Fashion'}</Text>
-          </Block>
-        </Button>
+      <Block center>
       </Block>
     );
   }
-  renderTabs = () => {
-    const { tabs, tabIndex, navigation } = this.props;
-    const defaultTab = tabs && tabs[0] && tabs[0].id;
-    
-    if (!tabs) return null;
 
-    return (
-      <Tabs
-        data={tabs || []}
-        initialIndex={tabIndex || defaultTab}
-        onChange={id => navigation.setParams({ tabId: id })} />
-    )
-  }
-  renderHeader = () => {
-    const { search, options, tabs } = this.props;
-    if (search || tabs || options) {
-      return (
-        <Block center>
-          {search ? this.renderSearch() : null}
-          {options ? this.renderOptions() : null}
-          {tabs ? this.renderTabs() : null}
-        </Block>
-      );
-    }
-  }
   render() {
     const { back, title, white, transparent, bgColor, iconColor, titleColor, navigation, ...props } = this.props;
 
