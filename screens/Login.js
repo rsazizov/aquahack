@@ -16,7 +16,18 @@ import argonTheme from "../constants/Theme";
 import Images from "../constants/Images";
 
 class Login extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleLogin = this.handleLogin.bind(this);
+  }
+
+  handleLogin() {
+    alert('meow');
+  }
+
   render() {
+    StatusBar.setBarStyle('light-content', true);
+
     const { navigation } = this.props;
 
     return (
@@ -25,7 +36,7 @@ class Login extends React.Component {
           source={Images.LoginLanding}
           style={{ height: 350, width, zIndex: 1 }}
         />
-        <Block flex center>
+        <Block flex center style={styles.loginForm}>
           <Block width={width * 0.8} style={{ marginBottom: 15 }}>
             <Input
               borderless
@@ -56,13 +67,18 @@ class Login extends React.Component {
               }
             />
 
-            <Button color="primary" style={styles.loginButton}>
+            <Button onPress={this.handleLogin} color="primary" style={styles.loginButton}>
               <Text bold size={14} color={argonTheme.COLORS.WHITE}>
                 Login
               </Text>
             </Button>
           </Block>
 
+        </Block>
+
+        <Block middle top={false} style={styles.footer}>
+            <Text color={argonTheme.COLORS.MUTED}>Dont't have an account?</Text>
+            <Text color={argonTheme.COLORS.ACTIVE}>Contact us.</Text>
         </Block>
       </Block>
     );
@@ -76,10 +92,16 @@ const styles = StyleSheet.create({
   inputIcons: {
     marginRight: 12
   },
+  loginForm: {
+    marginVertical: theme.SIZES.BASE,
+  },
+  footer: {
+    marginBottom: theme.SIZES.BASE,
+  },
   loginButton: {
     width: width - theme.SIZES.BASE * 4 - 6,
     height: theme.SIZES.BASE * 4,
-    marginVertical: theme.SIZES.BASE * 2,
+    marginVertical: theme.SIZES.BASE,
     shadowRadius: 0,
     shadowOpacity: 0
   },
