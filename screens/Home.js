@@ -2,6 +2,8 @@ import React from 'react';
 import { StyleSheet, Dimensions, ScrollView, StatusBar } from 'react-native';
 import { Block, Text, Card, theme } from 'galio-framework';
 
+import AnnotatedText from '../components/AnnotatedText';
+
 // import { Card } from '../components';
 const { width } = Dimensions.get('screen');
 
@@ -9,13 +11,44 @@ import {
   LineChart
 } from 'react-native-chart-kit';
 import { argonTheme } from '../constants';
+import FieldCard from '../components/FieldCard';
 
 class Home extends React.Component {
+  state = {
+    fields: [
+      {
+        name: "Field 1",
+        ndvi: 31,
+        water: 10
+      },
+      {
+        name: "Field 2",
+        ndvi: 31,
+        water: 10
+      },
+      {
+        name: "Field 3",
+        ndvi: 31,
+        water: 10
+      },
+      {
+        name: "Field 3",
+        ndvi: 31,
+        water: 10
+      },
+      {
+        name: "Field 4",
+        ndvi: 31,
+        water: 10
+      }
+    ]
+  }
+
   renderStats = () => {
     const line = {
       datasets: [
         {
-          data: [20, 45, 32, 65, 40, 53]
+          data: [20, 45, 32, 65, 40, 53, 41, 52, 40]
         }
       ]
     };
@@ -30,17 +63,8 @@ class Home extends React.Component {
       }
     };
 
-    const AnnotatedText = (props) => {
-      return (
-        <Block column middle>
-          <Text h4 color={argonTheme.COLORS.PRIMARY}>{props.text}</Text>
-          <Text h6 color={argonTheme.COLORS.MUTED}>{props.annot}</Text>
-        </Block>
-      );
-    }
-
     return (
-      <Block middle>
+      <Block middle style={{marginBottom: theme.SIZES.BASE * 2}}>
         <LineChart
           data={line}
           chartConfig={chartConfig}
@@ -51,7 +75,6 @@ class Home extends React.Component {
           withInnerLines={false}
           withOuterLines={false}
           yLabelsOffset={36}
-          bezier
         >
         </LineChart>
 
@@ -63,16 +86,26 @@ class Home extends React.Component {
     );
   }
 
+  renderFieldCard(field) {
+    return (
+      <FieldCard 
+        title={field.name}
+        ndvi={field.ndvi}
+        water={field.water}
+        />
+    );
+  }
+
   render() {
     return (
-      <Block flex center style={styles.home}>
+      <Block center style={styles.home}>
         <ScrollView
           style={styles.scroll}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.articles}>
 
           {this.renderStats()}
-
+          {this.state.fields.map(this.renderFieldCard)}
         </ScrollView>
       </Block>
     );
@@ -81,18 +114,13 @@ class Home extends React.Component {
 
 const styles = StyleSheet.create({
   home: {
-    width: width - theme.SIZES.BASE * 2
+    width: width,
   },
   chart: {
     marginTop: theme.SIZES.BASE,
   },
   scroll: {
     marginTop: theme.SIZES.BASE,
-  },
-  chartText: {
-    position: 'absolute',
-    left: 36,
-    top: 10
   }
 });
 
