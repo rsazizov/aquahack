@@ -11,6 +11,7 @@ import { Block } from "galio-framework";
 import Home from "../screens/Home";
 import Login from "../screens/Login";
 import Field from "../screens/Field";
+import AddField from "../screens/AddField";
 import Profile from "../screens/Profile";
 import Elements from "../screens/Elements";
 
@@ -64,6 +65,31 @@ function ProfileStack(props) {
           headerTransparent: true
         }}
       />
+    </Stack.Navigator>
+  );
+}
+
+function AddFieldStack(props) {
+  return (
+    <Stack.Navigator mode="card" headerMode="screen">
+      <Stack.Screen
+        name="AddField"
+        component={AddField}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header
+              title="Add Field"
+              search
+              options
+              navigation={navigation}
+              scene={scene}
+            />
+          ),
+          cardStyle: { backgroundColor: "#F8F9FE" }
+        }}
+      />
+
+      <Stack.Screen name="Add Field" component={AddField} />
     </Stack.Navigator>
   );
 }
@@ -140,6 +166,7 @@ function AppStack(props) {
       initialRouteName="Home"
     >
       <Drawer.Screen name="Home" component={HomeStack} />
+      <Drawer.Screen name="Add Field" component={AddFieldStack} />
       <Drawer.Screen name="Profile" component={ProfileStack} />
       <Drawer.Screen name="Elements" component={ElementsStack} />
     </Drawer.Navigator>

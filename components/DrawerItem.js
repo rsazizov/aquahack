@@ -37,6 +37,15 @@ class DrawerItem extends React.Component {
             color={focused ? "white" : argonTheme.COLORS.WARNING}
           />
         );
+      case "Add Field":
+        return (
+          <Icon
+            name="map-big"
+            family="ArgonExtra"
+            size={14}
+            color={focused ? "white" : argonTheme.COLORS.WARNING}
+          />
+        );
       default:
         return null;
     }
