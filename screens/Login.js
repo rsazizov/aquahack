@@ -15,16 +15,43 @@ const { height, width } = Dimensions.get("screen");
 import argonTheme from "../constants/Theme";
 import Images from "../constants/Images";
 
+import * as services from '../services';
+
 class Login extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      username: '',
+      password: '',
+      hadErorr: false
+    }
+
     this.handleLogin = this.handleLogin.bind(this);
   }
 
   handleLogin() {
-    alert('meow');
+    services.getToken(this.state.username, this.state.password)
+      .then(() => {
+        this.props.navigation.navigate("App");
+      }).catch(() => this.setState({hadErorr: true}));
   }
 
+  renderError() {
+    if (this.state.hadErorr) {
+      return (
+        <Block flex middle top={false} style={styles.error}>
+          <Text color={argonTheme.COLORS.INPUT_ERROR}>Something went wrong</Text>
+        </Block>
+      );
+    } else {
+      return (
+        <Block flex middle top={false} style={styles.error}>
+        </Block>
+      );
+    }
+  }
+  
   render() {
     StatusBar.setBarStyle('light-content', true);
 
@@ -41,6 +68,7 @@ class Login extends React.Component {
             <Input
               borderless
               placeholder="Username"
+              onChangeText={(username => this.setState({ username }))}
               iconContent={
                 <Icon
                   size={16}
@@ -48,7 +76,7 @@ class Login extends React.Component {
                   name="ic_mail_24px"
                   family="ArgonExtra"
                   style={styles.inputIcons}
-                />
+              />
               }
             />
 
@@ -56,6 +84,8 @@ class Login extends React.Component {
               password
               borderless
               placeholder="Password"
+              name="password"
+              onChangeText={(password => this.setState({ password }))}
               iconContent={
                 <Icon
                   size={16}
@@ -76,9 +106,11 @@ class Login extends React.Component {
 
         </Block>
 
-        <Block middle top={false} style={styles.footer}>
-            <Text color={argonTheme.COLORS.MUTED}>Dont't have an account?</Text>
-            <Text color={argonTheme.COLORS.ACTIVE}>Contact us.</Text>
+
+        {this.renderError()}
+
+        <Block middle style={styles.footer}>
+            <Text color={argonTheme.COLORS.MUTED}>Dont't have an account? Contact us.</Text>
         </Block>
       </Block>
     );
@@ -94,6 +126,8 @@ const styles = StyleSheet.create({
   },
   loginForm: {
     marginVertical: theme.SIZES.BASE,
+  },
+  error: {
   },
   footer: {
     marginBottom: theme.SIZES.BASE,

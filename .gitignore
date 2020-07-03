@@ -10,3 +10,4 @@ yarn.lock
 venv
 __pycache__
 *.pyc
+migrations/

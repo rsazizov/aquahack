@@ -7,7 +7,7 @@ import { Block, GalioProvider } from "galio-framework";
 import { NavigationContainer } from "@react-navigation/native";
 
 // Before rendering any navigation stack
-import { enableScreens } from "react-native-screens";
+import { enableScreens, useScreens } from "react-native-screens";
 enableScreens();
 
 import Screens from "./navigation/Screens";
@@ -39,6 +39,11 @@ function cacheImages(images) {
 
 export default props => {
   const [isLoadingComplete, setLoading] = useState(false);
+  const [apiToken] = useState(null);
+
+  function onHasToken(apiToken) {
+    this.setState({apiToken})
+  }
 
   let [fontsLoaded] = useFonts({
     'ArgonExtra': require('./assets/font/argon.ttf'),
