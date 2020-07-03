@@ -1,7 +1,7 @@
 {
-  "name": "argon-react-native",
+  "name": "aquahack",
   "version": "1.5.0",
-  "description": "Argon React Native, based on Argon Design System. Coded by Creative Tim",
+  "description": "",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",

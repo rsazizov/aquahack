@@ -39,6 +39,7 @@ function cacheImages(images) {
 
 export default props => {
   const [isLoadingComplete, setLoading] = useState(false);
+
   let [fontsLoaded] = useFonts({
     'ArgonExtra': require('./assets/font/argon.ttf'),
   });
@@ -57,15 +58,15 @@ export default props => {
     setLoading(true);
   };
 
-  if(!fontsLoaded && !isLoadingComplete) {
-    return (
-      <AppLoading
-        startAsync={_loadResourcesAsync}
-        onError={_handleLoadingError}
-        onFinish={_handleFinishLoading}
-      />
-    );
-  } else if(fontsLoaded) {
+  // if(!fontsLoaded && !isLoadingComplete) {
+  //   return (
+  //     <AppLoading
+  //       startAsync={_loadResourcesAsync}
+  //       onError={_handleLoadingError}
+  //       onFinish={_handleFinishLoading}
+  //     />
+  //   );
+  // } else if(fontsLoaded) {
     return (
       <NavigationContainer>
         <GalioProvider theme={argonTheme}>
@@ -75,7 +76,7 @@ export default props => {
         </GalioProvider>
       </NavigationContainer>
     );
-  }
+  // }
 }
 
 // export default class App extends React.Component {
