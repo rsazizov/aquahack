@@ -7,44 +7,19 @@ import AnnotatedText from '../components/AnnotatedText';
 // import { Card } from '../components';
 const { width } = Dimensions.get('screen');
 
+import { store, dispatcher } from '../store';
+import { Container } from 'flux/utils';
+
 import {
   LineChart
 } from 'react-native-chart-kit';
 
 import { argonTheme } from '../constants';
+
+import * as services from '../services';
 import FieldCard from '../components/FieldCard';
 
 class Home extends React.Component {
-  state = {
-    fields: [
-      {
-        name: "Field 1",
-        ndvi: 31,
-        water: 10
-      },
-      {
-        name: "Field 2",
-        ndvi: 31,
-        water: 10
-      },
-      {
-        name: "Field 3",
-        ndvi: 31,
-        water: 10
-      },
-      {
-        name: "Field 3",
-        ndvi: 31,
-        water: 10
-      },
-      {
-        name: "Field 4",
-        ndvi: 31,
-        water: 10
-      }
-    ]
-  }
-
   renderStats = () => {
     const line = {
       datasets: [
@@ -100,11 +75,25 @@ class Home extends React.Component {
     return (
       <FieldCard 
         title={field.name}
-        ndvi={field.ndvi}
-        water={field.water}
+        // ndvi={field.ndvi}
+        // water={field.water}
+        ndvi={0}
+        water={0}
         onPress={this.viewField.bind(this, field.name)}
         />
     );
+  }
+
+  componentDidMount(props) {
+    services.getFields().then((res) => {
+      for (let field of res.fields) {
+        dispatcher.dispatch({
+          type: 'ADD_FIELD',
+          name: field.name,
+          apiKey: field.apiKey
+        });
+      }
+    });
   }
 
   render() {
@@ -116,7 +105,7 @@ class Home extends React.Component {
           contentContainerStyle={styles.articles}>
 
           {this.renderStats()}
-          {this.state.fields.map(this.renderFieldCard)}
+          {this.props.fields.map(this.renderFieldCard)}
         </ScrollView>
       </Block>
     );
@@ -135,4 +124,16 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Home;
+const HomeContainer = Container.createFunctional(
+  (props) => (<Home fields={props.fields} />),
+  () => {
+    return [store];
+  }, 
+  () => {
+    return {
+      fields: store.getState()
+    }
+  }
+ );
+
+export default HomeContainer;

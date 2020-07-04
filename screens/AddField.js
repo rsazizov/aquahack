@@ -10,6 +10,7 @@ import Input from '../components/Input'
 const { width } = Dimensions.get('screen');
 
 import * as services from '../services';
+import { dispatcher } from '../store';
 
 class AddField extends React.Component {
   state = {
@@ -22,7 +23,12 @@ class AddField extends React.Component {
 
   handleAddField = () => {
     const { fieldName, gps } = this.state;
-    services.addField(fieldName, gps).then(() => {
+    services.addField(fieldName, gps) .then((json) => {
+      dispatcher.dispatch({
+        type: 'ADD_FIELD',
+        name: json.name,
+        apiId: json.apiId 
+      })
     }).catch((err) => {
       console.warn(err);
     });

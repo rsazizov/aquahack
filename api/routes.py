@@ -52,8 +52,11 @@ def create_polygon(lon, lat, name):
 # @auth.login_required
 def field():
   if request.method == 'GET':
-    field = Field.query.all()
-    return [field.to_dict() for field in fields]
+    fields = Field.query.all()
+
+    return {
+      'fields': [field.to_dict() for field in fields]
+    }
   else:
     print(request.get_data())
     data = request.get_json() or {}
@@ -69,5 +72,7 @@ def field():
     db.session.add(field)
     db.session.commit()
 
-
-    return { 'status': 'ok' }
+    return {
+      'name': name,
+      'apiId': api_id
+    }

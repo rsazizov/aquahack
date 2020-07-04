@@ -19,6 +19,10 @@ export function getToken(username, password) {
     .then(json => token = json.token);
 }
 
+export function getFields() {
+  return fetch(api + 'field').then(res => res.json());
+}
+
 export function addField(name, gps) {
   return fetch(api + 'field', {
     method: "POST",
@@ -30,5 +34,5 @@ export function addField(name, gps) {
       lat: gps.lat,
       lon: gps.lon
     })
-  }).then(res => res.json())
+  }).then(res => res.json());
 }
