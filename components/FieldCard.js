@@ -24,9 +24,6 @@ export default (props) => {
         </Block>
 
         <Block row>
-          <Text style={{
-            marginRight: theme.SIZES.BASE
-          }} color={argonTheme.COLORS.SECONDARY}>NDVI: {props.ndvi}</Text>
           <Text color={argonTheme.COLORS.SECONDARY}>{props.water} L</Text>
         </Block>
       </Block>

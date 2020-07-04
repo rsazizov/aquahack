@@ -13,14 +13,12 @@ class AppStore extends ReduceStore {
   }
 
   reduce(state, action) {
+    console.log('reduce', action)
     switch (action.type) {
       case 'ADD_FIELD': 
-        const { name, apiId } = action;
+        const { type, ...field} = action;
         const mut = state.slice();
-        mut.push({
-          name,
-          apiId
-        })
+        mut.push(action)
         return mut;
     }
   }

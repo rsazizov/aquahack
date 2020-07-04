@@ -4,7 +4,7 @@ import { Block, Text, Card, theme } from 'galio-framework';
 
 import AnnotatedText from '../components/AnnotatedText';
 
-// import { Card } from '../components';
+import { useNavigation } from '@react-navigation/native';
 const { width } = Dimensions.get('screen');
 
 import { store, dispatcher } from '../store';
@@ -68,17 +68,17 @@ class Home extends React.Component {
   }
 
   viewField(name) {
-    this.props.navigation.navigate("Field", {field: name});
+    const field = this.props.fields.find(f => f.name === name)
+    this.props.navigation.navigate("Field", {field});
   }
 
   renderFieldCard(field) {
+    let forecast = Object.values(field.forecast);
     return (
       <FieldCard 
         title={field.name}
-        // ndvi={field.ndvi}
-        // water={field.water}
-        ndvi={0}
-        water={0}
+        key={field.apiKey}
+        water={(forecast[0]).toFixed(2)}
         onPress={this.viewField.bind(this, field.name)}
         />
     );
@@ -89,8 +89,10 @@ class Home extends React.Component {
       for (let field of res.fields) {
         dispatcher.dispatch({
           type: 'ADD_FIELD',
+          apiKey: field.apiKey,
           name: field.name,
-          apiKey: field.apiKey
+          water: field.water,
+          forecast: field.forecast
         });
       }
     });
@@ -124,16 +126,43 @@ const styles = StyleSheet.create({
   }
 });
 
-const HomeContainer = Container.createFunctional(
-  (props) => (<Home fields={props.fields} />),
-  () => {
+class HomeContainer extends React.Component {
+
+  super(props) {
+    this.super(props);
+  }
+
+  static getStores() {
     return [store];
-  }, 
-  () => {
+  }
+
+  static calculateState() {
     return {
       fields: store.getState()
     }
   }
- );
+  
+  render() {
+    return <Home {...this.props} {...this.state}/>
+  }
 
-export default HomeContainer;
+}
+
+export default Container.create(HomeContainer);
+
+// const HomeContainer = Container.createFunctional(
+//   (props) => (<Home navigation={props.navgation} fields={props.fields} />),
+//   () => {
+//     return [store];
+//   }, 
+//   () => {
+//     return {
+//       fields: store.getState(),
+//       navigation: useNavigation()
+//     }
+//   }
+//  );
+
+// export default (props) => {
+//   return <HomeContainer {...props} />
+// };

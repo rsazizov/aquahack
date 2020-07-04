@@ -19,12 +19,14 @@ class Field extends React.Component {
         borderRadius: 16
       }
     };
-    const line = {
-      datasets: [
-        {
-          data: [20, 45, 32, 65, 40, 53, 41, 52, 40]
-        }
-      ]
+
+    const { field } = this.props.route.params;
+
+    const data = {
+      labels: Object.keys(field.forecast).map(s => s.substr(5)),
+      datasets: [{
+        data: Object.values(field.forecast)
+      }]
     };
 
     return (
@@ -33,20 +35,12 @@ class Field extends React.Component {
        style={styles.field}>
         <ScrollView>
           <Text>
-            {this.props.route.params.field.toString()}
-          Today you need 10 L
-        </Text>
+            {field.name}
+          </Text>
 
           <BarChart
-            data={line}
-            chartConfig={chartConfig}
-            height={220}
-            width={width}
-            yLabelsOffset={36}
-          />
-
-          <BarChart
-            data={line}
+            data={data}
+            fromZero={true}
             chartConfig={chartConfig}
             height={220}
             width={width}

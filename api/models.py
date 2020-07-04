@@ -49,11 +49,40 @@ class Field(db.Model):
   geo = db.Column(db.JSON)
 
   def to_dict(self):
+    forecast = {}
+
+    for fc in Forecast.query.filter_by(field_id=self.id):
+      forecast[str(fc.date)] = fc.eto
+
     return {
       'id': self.id,
-      'api_id': self.api_id,
-      'name': self.name
+      'apiId': self.api_id,
+      'name': self.name,
+      'forecast': forecast
     }
 
   def __repr__(self):
     return f'<Field id={self.id}'
+
+class Forecast(db.Model):
+  __tablename__ = 'forecast'
+
+  id = db.Column(db.Integer, primary_key=True)
+  field_id = db.Column(db.Integer, db.ForeignKey('field.id'))
+  date = db.Column(db.Date, nullable=False)
+  eto = db.Column(db.Float, nullable=False)
+
+class Measurement(db.Model):
+  __tablename__ = 'measurement'
+
+  def to_dict(self):
+    return {
+      'id': self.id,
+      'date': self.date,
+      'ndvi': self.ndvi
+    }
+
+  id = db.Column(db.Integer, primary_key=True)
+  field_id = db.Column(db.Integer, db.ForeignKey('field.id'))
+  date = db.Column(db.Date, nullable=False)
+  ndvi = db.Column(db.Float, nullable=False)
