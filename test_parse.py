@@ -1,9 +1,9 @@
 import requests
 from selenium import webdriver
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-from selenium.common.exceptions import TimeoutException
+# from selenium.webdriver.support.ui import WebDriverWait
+# from selenium.webdriver.support import expected_conditions as EC
+# from selenium.webdriver.common.by import By
+# from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.action_chains import ActionChains
 
 url = "https://www.ventusky.com/?p=40.37;47.22;7&l=temperature-5cm"
@@ -14,6 +14,7 @@ x = "40.380"
 y = "47.675"
 
 driver = webdriver.Chrome()
+driver.implicitly_wait(10)
 # driver.set_window_position(0,0)
 # driver.set_window_size(2000, 2000)
 driver.get("https://www.windy.com/" + x + "/" + y + "?temp,2020-07-13-12,40.470,47.642,8")
@@ -32,19 +33,19 @@ driver.get("https://www.windy.com/" + x + "/" + y + "?temp,2020-07-13-12,40.470,
 
 # print("----------------------------")
 
-delay = 10 # seconds
-myElem = WebDriverWait(driver, delay).until(EC.presence_of_element_located((By.ID, 'detail-data-table')))
-print ("Page is ready!")
+# delay = 10 # seconds
+# myElem = WebDriverWait(driver, delay).until(EC.presence_of_element_located((By.ID, 'detail-data-table')))
+# print ("Page is ready!")
 
 
-elem = driver.find_element_by_id("detail-data-table")
+# elem = driver.find_element_by_id("detail-data-table")
 temps = driver.find_elements_by_xpath('//*[@id="detail-data-table"]/tbody/tr[4]/td')
 # //*[@id="detail-data-table"]/tbody/tr[4]/td[1]
 #detail-data-table > tbody > tr.td-temp.height-temp.d-display-table > td:nth-child(1)
 #detail-data-table > tbody > tr.td-temp.height-temp.d-display-table > td:nth-child(6)
 #detail-data-table > tbody > tr.td-temp.height-temp.d-display-table > td:nth-child(8)
 # temps2 = driver.find_elements_by_class_name('height-temp')
-print(temps)
+
 # print(elem)
 # print("!----------------------------!")
 # print(temps)
