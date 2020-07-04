@@ -1,12 +1,16 @@
 from api import app, db
 from api.models import *
-from api.tasks import fetch_ndvi
 
 from flask_httpauth import HTTPBasicAuth
-from flask import g, request
+from flask import g, request, send_file
 
 from api.utils import elevation
 
+from pyowm.commons.enums import ImageTypeEnum
+from pyowm.agroapi10.enums import SatelliteEnum, PresetEnum
+
+import requests
+import io
 import datetime as dt
 import pyowm as owm
 import json
@@ -52,18 +56,6 @@ def create_polygon(lon, lat, name):
   result = mgr.create_polygon(owm.utils.geo.Polygon(poly), name)
 
   return poly, result.id
-
-@app.route('/api/ndvi')
-def ndvi():
-  data = request.get_json()
-
-  field = Field.query.filter_by(apiId=data['field']['apiId']).first()
-  msms = Measurement.query.filter_by(field_id=field.id).all()
-
-  return {
-    "field": field.id,
-    "measurements": [msm.to_dict() for msm in msms]
-  }
 
 def calc_eto(field, year_day, fc):
   lon, lat = json.loads(field.geo)[0][0]
@@ -127,6 +119,34 @@ def forecast():
 
   return { 'status': 'ok' }
 
+def fetch_ndvi(id):
+  MAX_CLOUD_COVERAGE = 80
+  NDVI_PERIOD_DAYS = 365
+
+  ow = owm.OWM(app.config['OWM_API_KEY'])
+  mgr = ow.agro_manager()
+
+  now = int(dt.datetime.now().timestamp())
+
+  acq_from = int((dt.datetime.now() - dt.timedelta(days=NDVI_PERIOD_DAYS)).timestamp())
+  acq_to = now
+
+  img_type = ImageTypeEnum.PNG
+  preset = PresetEnum.NDVI
+  sat = SatelliteEnum.SENTINEL_2.symbol
+
+  result = mgr.search_satellite_imagery(id, acq_from, acq_to, 
+      img_type=img_type, preset=preset, acquired_by=sat)[0]
+
+  r = requests.get(result.url)
+
+  return r.content
+  
+@app.route('/api/ndvi/<id>')
+def ndvi(id):
+  r = fetch_ndvi(id)
+  return send_file(io.BytesIO(r), mimetype='image/png')
+
 @app.route('/api/field', methods=['POST', 'GET'])
 # @auth.login_required
 def field():
@@ -150,8 +170,6 @@ def field():
 
     db.session.add(field)
     db.session.commit()
-
-    forecast(field)
 
     return {
       'name': name,

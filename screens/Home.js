@@ -78,7 +78,7 @@ class Home extends React.Component {
       <FieldCard 
         title={field.name}
         key={field.apiKey}
-        water={(forecast[0]).toFixed(2)}
+        water={(forecast[0] || 0).toFixed(2)}
         onPress={this.viewField.bind(this, field.name)}
         />
     );
@@ -89,7 +89,7 @@ class Home extends React.Component {
       for (let field of res.fields) {
         dispatcher.dispatch({
           type: 'ADD_FIELD',
-          apiKey: field.apiKey,
+          apiId: field.apiId,
           name: field.name,
           water: field.water,
           forecast: field.forecast

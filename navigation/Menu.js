@@ -15,7 +15,6 @@ function CustomDrawerContent({ drawerPosition, navigation, profile, focused, sta
   const screens = [
     "Home", 
     "Add Field",
-    "Elements",
   ];
   return (
     <Block
@@ -51,6 +50,10 @@ function CustomDrawerContent({ drawerPosition, navigation, profile, focused, sta
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  logo: {
+    width: 50,
+    height: 50
   },
   header: {
     paddingHorizontal: 28,

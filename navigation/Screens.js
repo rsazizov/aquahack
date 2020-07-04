@@ -12,7 +12,6 @@ import Home from "../screens/Home";
 import Login from "../screens/Login";
 import Field from "../screens/Field";
 import AddField from "../screens/AddField";
-import Elements from "../screens/Elements";
 
 // drawer
 import CustomDrawerContent from "./Menu";
@@ -26,23 +25,6 @@ const { width } = Dimensions.get("screen");
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
-
-function ElementsStack(props) {
-  return (
-    <Stack.Navigator mode="card" headerMode="screen">
-      <Stack.Screen
-        name="Elements"
-        component={Elements}
-        options={{
-          header: ({ navigation, scene }) => (
-            <Header title="Elements" navigation={navigation} scene={scene} />
-          ),
-          cardStyle: { backgroundColor: "#F8F9FE" }
-        }}
-      />
-    </Stack.Navigator>
-  );
-}
 
 function AddFieldStack(props) {
   return (
@@ -142,7 +124,6 @@ function AppStack(props) {
     >
       <Drawer.Screen name="Home" component={HomeStack} />
       <Drawer.Screen name="Add Field" component={AddFieldStack} />
-      <Drawer.Screen name="Elements" component={ElementsStack} />
     </Drawer.Navigator>
   );
 }
