@@ -12,7 +12,6 @@ import Home from "../screens/Home";
 import Login from "../screens/Login";
 import Field from "../screens/Field";
 import AddField from "../screens/AddField";
-import Profile from "../screens/Profile";
 import Elements from "../screens/Elements";
 
 // drawer
@@ -39,30 +38,6 @@ function ElementsStack(props) {
             <Header title="Elements" navigation={navigation} scene={scene} />
           ),
           cardStyle: { backgroundColor: "#F8F9FE" }
-        }}
-      />
-    </Stack.Navigator>
-  );
-}
-
-function ProfileStack(props) {
-  return (
-    <Stack.Navigator initialRouteName="Profile" mode="card" headerMode="screen">
-      <Stack.Screen
-        name="Profile"
-        component={Profile}
-        options={{
-          header: ({ navigation, scene }) => (
-            <Header
-              transparent
-              white
-              title="Profile"
-              navigation={navigation}
-              scene={scene}
-            />
-          ),
-          cardStyle: { backgroundColor: "#FFFFFF" },
-          headerTransparent: true
         }}
       />
     </Stack.Navigator>
@@ -167,7 +142,6 @@ function AppStack(props) {
     >
       <Drawer.Screen name="Home" component={HomeStack} />
       <Drawer.Screen name="Add Field" component={AddFieldStack} />
-      <Drawer.Screen name="Profile" component={ProfileStack} />
       <Drawer.Screen name="Elements" component={ElementsStack} />
     </Drawer.Navigator>
   );

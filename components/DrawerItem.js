@@ -28,15 +28,6 @@ class DrawerItem extends React.Component {
             color={focused ? "white" : argonTheme.COLORS.ERROR}
           />
         );
-      case "Profile":
-        return (
-          <Icon
-            name="chart-pie-35"
-            family="ArgonExtra"
-            size={14}
-            color={focused ? "white" : argonTheme.COLORS.WARNING}
-          />
-        );
       case "Add Field":
         return (
           <Icon
