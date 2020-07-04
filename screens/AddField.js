@@ -8,26 +8,28 @@ import Icon from '../components/Icon'
 import Input from '../components/Input'
 
 const { width } = Dimensions.get('screen');
-import { LineChart, BarChart } from 'react-native-chart-kit';
 
 import * as services from '../services';
 
 class AddField extends React.Component {
-
   state = {
-    gps: {lon: 0, lat: 0},
+    gps: {
+      lat: 40.483994,
+      lon: 49.801848
+    },
     fieldName: ''
   }
 
   handleAddField = () => {
     const { fieldName, gps } = this.state;
-    services.addField(fieldName, gps)
+    services.addField(fieldName, gps).then(() => {
+    }).catch((err) => {
+      console.warn(err);
+    });
   }
 
   render() {
-    // tesevvur eliyin guya gps var burda
-    const lat = 40.486904;
-    const lon = 49.801114;
+    const { lat, lon } = this.state.gps;
 
     return (
       <KeyboardAvoidingView

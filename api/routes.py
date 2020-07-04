@@ -30,7 +30,7 @@ def token():
   return { 'token': token.decode('ascii') }
 
 def create_polygon(lon, lat, name):
-  d = 0.002
+  d = 0.02
 
   first = (lon - d, lat - d)
   poly = [[
@@ -46,16 +46,14 @@ def create_polygon(lon, lat, name):
 
   result = mgr.create_polygon(owm.utils.geo.Polygon(poly), name)
 
-  field = Field(api_id=result.id, user_id=0, geo=json.dumps(poly))
-
-  db.session.add(field)
-  db.session.commit()
+  return poly, result.id
 
 @app.route('/api/field', methods=['POST', 'GET'])
 # @auth.login_required
 def field():
   if request.method == 'GET':
-    return 'You are logged in!'
+    field = Field.query.all()
+    return [field.to_dict() for field in fields]
   else:
     print(request.get_data())
     data = request.get_json() or {}
@@ -64,6 +62,12 @@ def field():
     lat = data['lat'] 
     name = data['name'] 
 
-    create_polygon(lon, lat, name)
+    poly, api_id = create_polygon(lon, lat, name)
 
-    return { status: 'ok' }
+    field = Field(name=name, api_id=api_id, user_id=0, geo=json.dumps(poly))
+
+    db.session.add(field)
+    db.session.commit()
+
+
+    return { 'status': 'ok' }

@@ -36,16 +36,24 @@ class User(db.Model):
       user = User.query.get(data['id'])
       return user
   
-  def __repr__():
+  def __repr__(self):
     return f'<User name={self.name}>'
 
 class Field(db.Model):
   __tablename__ = 'field'
 
   id = db.Column(db.Integer, primary_key=True)
+  name = db.Column(db.String(32))
   api_id = db.Column(db.String(24), unique=True)
   user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
   geo = db.Column(db.JSON)
 
-  def __repr__():
+  def to_dict(self):
+    return {
+      'id': self.id,
+      'api_id': self.api_id,
+      'name': self.name
+    }
+
+  def __repr__(self):
     return f'<Field id={self.id}'

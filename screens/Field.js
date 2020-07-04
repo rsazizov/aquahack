@@ -31,43 +31,29 @@ class Field extends React.Component {
       <Block
        flex
        style={styles.field}>
-        <Text>
-         {this.props.route.params.field.toString()}
+        <ScrollView>
+          <Text>
+            {this.props.route.params.field.toString()}
           Today you need 10 L
         </Text>
-        <LineChart
-          data={line}
-          chartConfig={chartConfig}
-          style={styles.chart}
-          height={220}
-          width={width}
-          segments={0}
-          withInnerLines={false}
-          withOuterLines={false}
-          yLabelsOffset={36}
-        >
-        </LineChart>
 
-        <LineChart
-          data={line}
-          chartConfig={chartConfig}
-          height={220}
-          width={width}
-          segments={0}
-          withInnerLines={false}
-          withOuterLines={false}
-          yLabelsOffset={36}
-        >
-        </LineChart>
+          <BarChart
+            data={line}
+            chartConfig={chartConfig}
+            height={220}
+            width={width}
+            yLabelsOffset={36}
+          />
 
-        <BarChart
-          data={line}
-          chartConfig={chartConfig}
-          height={220}
-          width={width}
-          yLabelsOffset={36}
-        />
+          <BarChart
+            data={line}
+            chartConfig={chartConfig}
+            height={220}
+            width={width}
+            yLabelsOffset={36}
+          />
 
+        </ScrollView>
       </Block>
     )
 
