@@ -44,7 +44,7 @@ class Home extends React.Component {
     for (let field of this.props.fields) {
       data.push({
         name: field.name,
-        water: (Object.values(field.forecast) || []).reduce((a, b) => a + b, 0),
+        water: (Object.values(field.forecast || {})).reduce((a, b) => a + b, 0),
         color: '#' + this.intToRGB(this.hashcode(field.name)),
         legendFontColor: "#7F7F7F",
         legendFontSize: 15
@@ -67,12 +67,12 @@ class Home extends React.Component {
 
     let totalWater = 0;
     for (let field of this.props.fields) {
-      totalWater += Object.values(field.forecast).reduce((a, b) => a + b, 0);
+      totalWater += Object.values(field.forecast || {}).reduce((a, b) => a + b, 0);
     }
 
     let totalPrice = 0;
     for (let field of this.props.fields) {
-      totalPrice += Object.values(field.forecast).reduce((a, b) => a + b, 0) * field.waterPrice;
+      totalPrice += Object.values(field.forecast || {}).reduce((a, b) => a + b, 0) * field.waterPrice;
     }
 
     return (
@@ -110,7 +110,7 @@ class Home extends React.Component {
   }
 
   renderFieldCard(field) {
-    let forecast = Object.values(field.forecast);
+    let forecast = Object.values(field.forecast || {});
     return (
       <FieldCard 
         title={field.name}

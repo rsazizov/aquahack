@@ -53,9 +53,9 @@ def create_polygon(lon, lat, name):
   ow = owm.OWM(app.config['OWM_API_KEY'])
   mgr = ow.agro_manager()
 
-  result = mgr.create_polygon(owm.utils.geo.Polygon(poly), name)
+  #result = mgr.create_polygon(owm.utils.geo.Polygon(poly), name)
 
-  return poly, result.id
+  return poly, str(dt.datetime.now()) #result.id
 
 def calc_eto(field, year_day, fc):
   lon, lat = json.loads(field.geo)[0][0]
@@ -106,16 +106,16 @@ def forecast():
   eto_forecast = []
 
   for i, fc in enumerate(one_call.forecast_daily[:7]):
-    eto_forecast.append(calc_eto(field, year_day + 1, fc))
+    eto = calc_eto(field, year_day + 1, fc)
+    f = Forecast(field_id=-1, date=dt.date.today() + dt.timedelta(days=i), water=eto)
+    db.session.add(f)
   
-  print(eto_forecast)
-
-  for field in Field.query.all():
-    for i, eto in enumerate(eto_forecast):
-      k = lookup_crop_k(field.crop)
-      liters = (eto * k * field.area)
-      f = Forecast(field_id=field.id, date=dt.date.today() + dt.timedelta(days=i), water=liters)
-      db.session.add(f)
+  # for field in Field.query.all():
+  #   for i, eto in enumerate(eto_forecast):
+  #     k = lookup_crop_k(field.crop)
+  #     liters = (eto * k * field.area)
+  #     f = Forecast(field_id=field.id, date=dt.date.today() + dt.timedelta(days=i), water=liters)
+  #     db.session.add(f)
   
   db.session.commit()
 
@@ -153,6 +153,7 @@ def ndvi(id):
 # @auth.login_required
 def field():
   if request.method == 'GET':
+    # fields = Field.query.filter_by(user_id=g.user.id)
     fields = Field.query.all()
 
     return {
@@ -165,7 +166,7 @@ def field():
     lon = data['lon']
     lat = data['lat'] 
     name = data['name'] 
-    area = data['area']
+    area = float(data['area'])
     crop = data['crop']
 
     poly, api_id = create_polygon(lon, lat, name)
@@ -177,7 +178,12 @@ def field():
     db.session.add(field)
     db.session.commit()
 
-    return {
-      'name': name,
-      'apiId': api_id
-    }
+    for fc in Forecast.query.filter_by(field_id=-1):
+      k = lookup_crop_k(field.crop)
+      liters = fc.water * k * area
+      f = Forecast(field_id=field.id, date=fc.date, water=liters)
+      db.session.add(f)
+
+    db.session.commit()
+
+    return field.to_dict()

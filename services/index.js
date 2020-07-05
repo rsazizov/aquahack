@@ -20,15 +20,36 @@ export function getToken(username, password) {
 }
 
 export function getFields() {
-  return fetch(api + 'field').then(res => res.json());
+  if (!token) {
+    // TODO: Error
+  }
+
+  const headers = new Headers();
+
+  const creds = token + ":";
+  const buf = new Buffer(creds);
+  let creds64 = buf.toString('base64');
+
+  headers.set('Authorization', 'Basic ' + creds64);
+
+  return fetch(api + 'field', {
+    headers: headers
+  }).then(res => res.json());
 }
 
 export function addField(name, gps, area, crop) {
+  const headers = new Headers();
+
+  const creds = token + ":";
+  const buf = new Buffer(creds);
+  let creds64 = buf.toString('base64');
+
+  // headers.append('Authorization', 'Basic ' + creds64);
+  headers.set('Content-Type', 'application/json');
+
   return fetch(api + 'field', {
     method: "POST",
-    headers: {
-      'Content-Type': 'application/json'
-    },
+    headers: headers,
     body: JSON.stringify({
       name,
       lat: gps.lat,

@@ -24,13 +24,24 @@ class AddField extends React.Component {
     area: 0
   }
 
+  inputs = []
+
+  constructor(props) {
+    super(props);
+    this.in1 = React.createRef();
+    this.in2 = React.createRef();
+    this.in3 = React.createRef();
+  }
+
   handleAddField = () => {
     const { fieldName, gps, area, crop } = this.state;
     services.addField(fieldName, gps, area, crop) .then((json) => {
       dispatcher.dispatch({
         type: 'ADD_FIELD',
         name: json.name,
-        apiId: json.apiId 
+        apiId: json.apiId,
+        forecast: json.forecast,
+        waterPrice: json.waterPrice
       })
     }).catch((err) => {
       console.warn(err);
@@ -39,10 +50,11 @@ class AddField extends React.Component {
 
   render() {
     const { lat, lon } = this.state.gps;
+    const inputs = this.inputs;
 
     return (
       <KeyboardAvoidingView
-        // style={{ flex: 1 }}
+        style={{ flex: 1 }}
         behavior={"padding"}
       >
         <SafeAreaView
@@ -58,13 +70,14 @@ class AddField extends React.Component {
             </Block>
 
             <Block center style={{
-              // flex: 1,
-              marginTop: 20,
+              flex: 1,
+              marginTop: 150,
               width: width * 0.8,
             }}>
 
               <Input
                 borderless
+                ref={this.in1}
                 placeholder="Field name"
                 onChangeText={(fieldName => this.setState({ fieldName }))}
                 iconContent={null}
@@ -72,6 +85,7 @@ class AddField extends React.Component {
 
               <Input
                 borderless
+                ref={this.in2}
                 placeholder="Area (km2)"
                 onChangeText={(area => this.setState({ area }))}
                 iconContent={null}
@@ -79,6 +93,7 @@ class AddField extends React.Component {
 
               <Input
                 borderless
+                ref={this.in3}
                 placeholder="Crop"
                 onChangeText={(crop => this.setState({ crop }))}
                 iconContent={null}
@@ -105,15 +120,17 @@ class AddField extends React.Component {
 const styles = {
   addField: {
     backgroundColor: argonTheme.COLORS.SECONDARY,
-    // flex: 1,
+    flex: 1,
   },
   inner: {
-    // flex: 1,
-    // justifyContent: 'flex-end'
+    flex: 1,
+    justifyContent: 'flex-end'
   },
   mapContainer: {
     width,
+    flex: 1,
     height: 400,
+    zIndex: -1,
   }
 }
 

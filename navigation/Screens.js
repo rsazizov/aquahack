@@ -79,13 +79,13 @@ function HomeStack(props) {
 export default function LoginStack(props) {
   return (
     <Stack.Navigator mode="card" headerMode="none">
-      {/* <Stack.Screen
+      <Stack.Screen
         name="Login"
         component={Login}
         option={{
           headerTransparent: true
         }}
-      /> */}
+      />
       <Stack.Screen name="App" component={AppStack} />
     </Stack.Navigator>
   );

@@ -16,6 +16,7 @@ import argonTheme from "../constants/Theme";
 import Images from "../constants/Images";
 
 import * as services from '../services';
+import { SafeAreaView } from "react-native-safe-area-context";
 
 class Login extends React.Component {
   constructor(props) {
@@ -108,10 +109,6 @@ class Login extends React.Component {
 
 
         {this.renderError()}
-
-        <Block middle style={styles.footer}>
-            <Text color={argonTheme.COLORS.MUTED}>Dont't have an account? Contact us.</Text>
-        </Block>
       </Block>
     );
   }
@@ -130,7 +127,9 @@ const styles = StyleSheet.create({
   error: {
   },
   footer: {
-    marginBottom: theme.SIZES.BASE,
+    position: 'absolute',
+    bottom: theme.SIZES.BASE,
+    left: 40
   },
   loginButton: {
     width: width - theme.SIZES.BASE * 4 - 6,

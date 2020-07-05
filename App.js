@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { Image } from "react-native";
+import { Image, YellowBox } from "react-native";
 import { useFonts } from '@use-expo/font';
 import { Asset } from "expo-asset";
 import { Block, GalioProvider } from "galio-framework";
@@ -14,13 +14,6 @@ import { Images, argonTheme } from "./constants";
 
 // cache app images
 const assetImages = [
-  Images.Onboarding,
-  Images.LogoOnboarding,
-  Images.Logo,
-  Images.Pro,
-  Images.ArgonLogo,
-  Images.iOSLogo,
-  Images.androidLogo
 ];
 
 // cache product images
@@ -37,6 +30,7 @@ function cacheImages(images) {
 }
 
 export default props => {
+  console.disableYellowBox = true;
   const [isLoadingComplete, setLoading] = useState(false);
   const [apiToken] = useState(null);
 
