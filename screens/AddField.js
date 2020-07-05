@@ -4,6 +4,7 @@ import { Text, Block, theme} from "galio-framework";
 import { argonTheme } from '../constants';
 import CustomMap from '../components/CustomMap';
 import Button from '../components/Button'
+import Select from '../components/Select'
 import Icon from '../components/Icon'
 import Input from '../components/Input'
 
@@ -18,12 +19,14 @@ class AddField extends React.Component {
       lat: 40.483994,
       lon: 49.801848
     },
-    fieldName: ''
+    fieldName: '',
+    crop: '',
+    area: 0
   }
 
   handleAddField = () => {
-    const { fieldName, gps } = this.state;
-    services.addField(fieldName, gps) .then((json) => {
+    const { fieldName, gps, area, crop } = this.state;
+    services.addField(fieldName, gps, area, crop) .then((json) => {
       dispatcher.dispatch({
         type: 'ADD_FIELD',
         name: json.name,
@@ -39,7 +42,7 @@ class AddField extends React.Component {
 
     return (
       <KeyboardAvoidingView
-        style={{ flex: 1 }}
+        // style={{ flex: 1 }}
         behavior={"padding"}
       >
         <SafeAreaView
@@ -55,7 +58,7 @@ class AddField extends React.Component {
             </Block>
 
             <Block center style={{
-              flex: 1,
+              // flex: 1,
               marginTop: 20,
               width: width * 0.8,
             }}>
@@ -67,10 +70,23 @@ class AddField extends React.Component {
                 iconContent={null}
               />
 
+              <Input
+                borderless
+                placeholder="Area (km2)"
+                onChangeText={(area => this.setState({ area }))}
+                iconContent={null}
+              />
+
+              <Input
+                borderless
+                placeholder="Crop"
+                onChangeText={(crop => this.setState({ crop }))}
+                iconContent={null}
+              />
+
               <Button 
                 onPress={this.handleAddField}
                 style={{
-                  marginTop: 45,
                   width: width * 0.8,
                 }}>
                 <Text color={argonTheme.COLORS.SECONDARY}>
@@ -89,11 +105,11 @@ class AddField extends React.Component {
 const styles = {
   addField: {
     backgroundColor: argonTheme.COLORS.SECONDARY,
-    flex: 1,
+    // flex: 1,
   },
   inner: {
-    flex: 1,
-    justifyContent: 'flex-end'
+    // flex: 1,
+    // justifyContent: 'flex-end'
   },
   mapContainer: {
     width,

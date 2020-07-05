@@ -4,7 +4,7 @@ from api.models import *
 from flask_httpauth import HTTPBasicAuth
 from flask import g, request, send_file
 
-from api.utils import elevation
+from api.utils import *
 
 from pyowm.commons.enums import ImageTypeEnum
 from pyowm.agroapi10.enums import SatelliteEnum, PresetEnum
@@ -39,7 +39,7 @@ def token():
   return { 'token': token.decode('ascii') }
 
 def create_polygon(lon, lat, name):
-  d = 0.005
+  d = 0.001
 
   first = (lon - d, lat - d)
   poly = [[
@@ -102,17 +102,19 @@ def forecast():
   lon, lat = json.loads(field.geo)[0][0]
 
   one_call = mgr.one_call(lat=lat, lon=lon)
-
-
   year_day = dt.date.today().timetuple().tm_yday
   eto_forecast = []
 
   for i, fc in enumerate(one_call.forecast_daily[:7]):
     eto_forecast.append(calc_eto(field, year_day + 1, fc))
+  
+  print(eto_forecast)
 
   for field in Field.query.all():
     for i, eto in enumerate(eto_forecast):
-      f = Forecast(field_id=field.id, date=dt.date.today() + dt.timedelta(days=i), eto=eto)
+      k = lookup_crop_k(field.crop)
+      liters = (eto * k * field.area)
+      f = Forecast(field_id=field.id, date=dt.date.today() + dt.timedelta(days=i), water=liters)
       db.session.add(f)
   
   db.session.commit()
@@ -163,10 +165,14 @@ def field():
     lon = data['lon']
     lat = data['lat'] 
     name = data['name'] 
+    area = data['area']
+    crop = data['crop']
 
     poly, api_id = create_polygon(lon, lat, name)
 
-    field = Field(name=name, api_id=api_id, user_id=0, geo=json.dumps(poly))
+    field = Field(name=name, api_id=api_id, 
+                  user_id=1, geo=json.dumps(poly),
+                  area=area, crop=crop, water_price=lookup_water_price(0, 0))
 
     db.session.add(field)
     db.session.commit()

@@ -24,7 +24,7 @@ export default (props) => {
         </Block>
 
         <Block row>
-          <Text color={argonTheme.COLORS.SECONDARY}>{props.water} L</Text>
+          <Text color={argonTheme.COLORS.SECONDARY}>{props.water} ML</Text>
         </Block>
       </Block>
     </TouchableNativeFeedback >

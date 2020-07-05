@@ -43,22 +43,28 @@ class Field(db.Model):
   __tablename__ = 'field'
 
   id = db.Column(db.Integer, primary_key=True)
-  name = db.Column(db.String(32))
-  api_id = db.Column(db.String(24), unique=True)
-  user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-  geo = db.Column(db.JSON)
+  name = db.Column(db.String(32), nullable=False)
+  api_id = db.Column(db.String(24), unique=True, nullable=False)
+  user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+  geo = db.Column(db.JSON, nullable=False)
+  crop = db.Column(db.String(32), nullable=False)
+  area = db.Column(db.Float, nullable=False)
+  water_price = db.Column(db.Float, nullable=False)
 
   def to_dict(self):
     forecast = {}
 
     for fc in Forecast.query.filter_by(field_id=self.id):
-      forecast[str(fc.date)] = fc.eto
+      forecast[str(fc.date)] = fc.water
 
     return {
       'id': self.id,
       'apiId': self.api_id,
       'name': self.name,
-      'forecast': forecast
+      'forecast': forecast,
+      'area': self.area,
+      'crop': self.crop,
+      'waterPrice': self.water_price
     }
 
   def __repr__(self):
@@ -70,7 +76,7 @@ class Forecast(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   field_id = db.Column(db.Integer, db.ForeignKey('field.id'))
   date = db.Column(db.Date, nullable=False)
-  eto = db.Column(db.Float, nullable=False)
+  water = db.Column(db.Float, nullable=False)
 
 class Measurement(db.Model):
   __tablename__ = 'measurement'

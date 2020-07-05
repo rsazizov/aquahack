@@ -64,7 +64,7 @@ class Field extends React.Component {
             marginTop: theme.SIZES.BASE,
             marginLeft: 10,
           }} h5>
-            Today you'll need {latest} liters.
+            Today you'll need {latest} megaliters.
           </Text>
 
           {/* <Text style={{

@@ -11,7 +11,7 @@ import { store, dispatcher } from '../store';
 import { Container } from 'flux/utils';
 
 import {
-  LineChart
+  LineChart, PieChart
 } from 'react-native-chart-kit';
 
 import { argonTheme } from '../constants';
@@ -20,14 +20,40 @@ import * as services from '../services';
 import FieldCard from '../components/FieldCard';
 
 class Home extends React.Component {
+  hashcode(str) { // java string#hashcode
+    let hash = 0;
+
+    for (let i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    return hash;
+  }
+
+  intToRGB(i) {
+    const c = (i & 0x00FFFFFF)
+      .toString(16)
+      .toUpperCase();
+
+    return "00000".substring(0, 6 - c.length) + c;
+  }
+
   renderStats = () => {
-    const line = {
-      datasets: [
-        {
-          data: [20, 45, 32, 65, 40, 53, 41, 52, 40]
-        }
-      ]
-    };
+    const data = [];
+
+    for (let field of this.props.fields) {
+      data.push({
+        name: field.name,
+        water: (Object.values(field.forecast) || []).reduce((a, b) => a + b, 0),
+        color: '#' + this.intToRGB(this.hashcode(field.name)),
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 15
+      });
+    }
+
+    if (data.length === 0) {
+      return <Text color={argonTheme.COLORS.MUTED}>Loading...</Text>
+    }
 
     const chartConfig = {
       backgroundGradientFrom: argonTheme.COLORS.SECONDARY,
@@ -39,24 +65,35 @@ class Home extends React.Component {
       }
     };
 
+    let totalWater = 0;
+    for (let field of this.props.fields) {
+      totalWater += Object.values(field.forecast).reduce((a, b) => a + b, 0);
+    }
+
+    let totalPrice = 0;
+    for (let field of this.props.fields) {
+      totalPrice += Object.values(field.forecast).reduce((a, b) => a + b, 0) * field.waterPrice;
+    }
+
     return (
       <Block middle style={{marginBottom: theme.SIZES.BASE * 2}}>
-        <LineChart
-          data={line}
-          chartConfig={chartConfig}
-          style={styles.chart}
-          height={220}
-          width={width}
-          segments={0}
-          withInnerLines={false}
-          withOuterLines={false}
-          yLabelsOffset={36}
-        >
-        </LineChart>
+          <PieChart
+            data={data}
+            chartConfig={chartConfig}
+            // style={styles.chart}
+            height={220}
+            width={width}
+            accessor={"water"}
+            paddingLeft={15}
+            // segments={0}
+            // withInnerLines={false}
+            // withOuterLines={false}
+            // yLabelsOffset={36}
+          /> 
 
         <Block flex row style={{width}} space='around'>
-          <AnnotatedText text="154.32" annot="AZN" />
-          <AnnotatedText text="1054.5" annot="Liters" />
+          <AnnotatedText text={totalPrice.toFixed(1)} annot="AZN" />
+          <AnnotatedText text={totalWater.toFixed(1)} annot="Megalitres" />
         </Block>
       </Block>
     );
@@ -77,7 +114,7 @@ class Home extends React.Component {
     return (
       <FieldCard 
         title={field.name}
-        key={field.apiKey}
+        key={field.apiId}
         water={(forecast[0] || 0).toFixed(2)}
         onPress={this.viewField.bind(this, field.name)}
         />
@@ -92,7 +129,8 @@ class Home extends React.Component {
           apiId: field.apiId,
           name: field.name,
           water: field.water,
-          forecast: field.forecast
+          forecast: field.forecast,
+          waterPrice: field.waterPrice
         });
       }
     });
@@ -149,20 +187,3 @@ class HomeContainer extends React.Component {
 }
 
 export default Container.create(HomeContainer);
-
-// const HomeContainer = Container.createFunctional(
-//   (props) => (<Home navigation={props.navgation} fields={props.fields} />),
-//   () => {
-//     return [store];
-//   }, 
-//   () => {
-//     return {
-//       fields: store.getState(),
-//       navigation: useNavigation()
-//     }
-//   }
-//  );
-
-// export default (props) => {
-//   return <HomeContainer {...props} />
-// };

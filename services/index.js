@@ -23,7 +23,7 @@ export function getFields() {
   return fetch(api + 'field').then(res => res.json());
 }
 
-export function addField(name, gps) {
+export function addField(name, gps, area, crop) {
   return fetch(api + 'field', {
     method: "POST",
     headers: {
@@ -32,7 +32,9 @@ export function addField(name, gps) {
     body: JSON.stringify({
       name,
       lat: gps.lat,
-      lon: gps.lon
+      lon: gps.lon,
+      area,
+      crop
     })
   }).then(res => res.json());
 }
